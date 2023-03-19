@@ -35,52 +35,52 @@ const return_key = Icon(Icons.keyboard_return, color: Colors.blueGrey);
 
 Widget getKeyboard() {
   return Column(
-    children: keyboard
-        .map(
-          (row) => Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: row
-                .map(
-                  (key) => Flexible(
-                    child: key == '🠔'
-                        ? Container(
-                            margin: const EdgeInsets.only(right: 8.0),
-                            height: 44,
-                            child: backspace_key)
-                        : key == '⏎'
-                            ? Container(
-                                margin: const EdgeInsets.only(right: 8.0),
-                                height: 44,
-                                child: return_key)
-                            : Container(
-                                height: 44,
-                                margin: const EdgeInsets.only(right: 8.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.blueGrey,
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                                child: TextButton(
-                                  onPressed: () {
-                                    // handle key press
-                                  },
-                                  child: Text(
-                                    key,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                  ),
-                )
-                .toList(),
-          ),
-        )
-        .toList(),
+    children: keyboard.map((row) => getKeyboardRow(row)).toList(),
   );
 }
+
+Widget getKeyboardRow(List<String> row) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: row.map((key) => getKeyboardKey(key)).toList(),
+  );
+}
+
+Widget getKeyboardKey(String key) {
+  Widget child;
+  if (key == '🠔') {
+    child = backspace_key;
+  } else if (key == '⏎') {
+    child = return_key;
+  } else {
+    child = Text(
+      key,
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 17,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  return Flexible(
+    child: Container(
+      height: 44,
+      margin: const EdgeInsets.only(right: 8.0),
+      decoration: BoxDecoration(
+        color: key == '🠔' || key == '⏎' ? Colors.transparent : Colors.blueGrey,
+        borderRadius: BorderRadius.circular(4.0),
+      ),
+      child: TextButton(
+        onPressed: () {
+          // handle key press
+        },
+        child: child,
+      ),
+    ),
+  );
+}
+
 
 const topPadding = EdgeInsets.all(30.5);
 
