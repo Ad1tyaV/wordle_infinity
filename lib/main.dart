@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:wordle_infinity/pages/main_page.dart';
 import 'package:wordle_infinity/test_homepage.dart';
 import './assets/constants.dart' as constants;
+import './constants/wordles.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,8 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),
-      // home: const MyHomePage(title: constants.TITLE),
-      home: const TestHomePage(title: constants.TITLE),
+      home: const MainPage(),
     );
   }
 }
@@ -55,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              wordles[0],
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
