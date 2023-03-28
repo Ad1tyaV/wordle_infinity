@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wordle_infinity/pages/main_page.dart';
-import 'package:wordle_infinity/test_homepage.dart';
 import './assets/constants.dart' as constants;
 import './constants/wordles.dart';
 
