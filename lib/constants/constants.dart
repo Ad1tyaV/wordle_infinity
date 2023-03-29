@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 const margin_10 = EdgeInsets.only(top: 10);
 const margin_35 = EdgeInsets.all(35.0);
 
+const NOT_ENOUGH_WORDS = "Not Enough letters!";
+const INVALID_WORD = "Not a valid word!";
+
 EdgeInsets edgeInsetsAll(double edgeInsetValue) {
   return EdgeInsets.all(edgeInsetValue);
 }

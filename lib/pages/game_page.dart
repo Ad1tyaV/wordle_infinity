@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wordle_infinity/constants/allWords.dart';
 import 'package:wordle_infinity/constants/constants.dart';
 
 import '../constants/game_meta.dart';
@@ -78,6 +79,20 @@ class _GamePage extends State<GamePage> {
                   pressedKeys.isNotEmpty ? pressedKeys.removeLast() : null;
                   break;
                 case '⏎':
+                  {
+                    if ((pressedKeys.length) % 5 != 0) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(NOT_ENOUGH_WORDS),
+                      ));
+                    } else {
+                      if (!isValidWord(pressedKeys.join())) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(INVALID_WORD),
+                        ));
+                      }
+                    }
+                  }
                   break;
                 default:
                   pressedKeys.add(key);
