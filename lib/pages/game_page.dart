@@ -100,7 +100,11 @@ class _GamePage extends State<GamePage> {
                         content: Text(NOT_ENOUGH_WORDS),
                       ));
                     } else {
-                      String pressedWord = pressedKeys.join();
+                      String pressedWord = pressedKeys
+                          .sublist(pressedKeys.length - 5, pressedKeys.length)
+                          .join();
+                      // print("PressedWord = $pressedWord");
+                      // String pressedWord = pressedKeys.join();
                       if (!isValidWord(pressedWord)) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
