@@ -15,6 +15,9 @@ class GamePage extends StatefulWidget {
 
 class _GamePage extends State<GamePage> {
   List<String> pressedKeys = [];
+  Map<String, Color> solutionMap = {};
+  String wordSolution = "ADIEU";
+  int preventBackspace = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +49,9 @@ class _GamePage extends State<GamePage> {
   }
 
   Widget getKeyboardKey(String key) {
+    const transparentColor = Colors.transparent;
+    const defaultColor = Colors.blueGrey;
+
     Widget child;
     if (key == '🠔') {
       child = backspace_key;
@@ -67,8 +73,11 @@ class _GamePage extends State<GamePage> {
         height: 44,
         margin: const EdgeInsets.only(right: 8.0),
         decoration: BoxDecoration(
-          color:
-              key == '🠔' || key == '⏎' ? Colors.transparent : Colors.blueGrey,
+          color: key == '🠔' || key == '⏎'
+              ? transparentColor
+              : (!solutionMap.containsKey(key))
+                  ? defaultColor
+                  : solutionMap[key],
           borderRadius: BorderRadius.circular(4.0),
         ),
         child: TextButton(
@@ -76,7 +85,13 @@ class _GamePage extends State<GamePage> {
             setState(() {
               switch (key) {
                 case '🠔':
-                  pressedKeys.isNotEmpty ? pressedKeys.removeLast() : null;
+                  print(
+                      "PreventBackSpace = $preventBackspace and PressedLength = (${pressedKeys.length})");
+                  pressedKeys.isNotEmpty
+                      ? preventBackspace < pressedKeys.length
+                          ? pressedKeys.removeLast()
+                          : null
+                      : null;
                   break;
                 case '⏎':
                   {
@@ -85,17 +100,28 @@ class _GamePage extends State<GamePage> {
                         content: Text(NOT_ENOUGH_WORDS),
                       ));
                     } else {
-                      if (!isValidWord(pressedKeys.join())) {
+                      String pressedWord = pressedKeys.join();
+                      if (!isValidWord(pressedWord)) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text(INVALID_WORD),
                         ));
+                      } else {
+                        // The entered word is valid
+                        preventBackspace = pressedKeys.length;
+                        print("PBS=$preventBackspace");
+                        solutionMap = checkSolution(wordSolution, pressedWord);
                       }
                     }
                   }
                   break;
                 default:
-                  pressedKeys.add(key);
+                  if (pressedKeys.length % 5 != 0 ||
+                      pressedKeys.isEmpty ||
+                      pressedKeys.length == preventBackspace) {
+                    pressedKeys.add(key);
+                    print("PressedKeys=$pressedKeys");
+                  }
                   break;
               }
             });
@@ -112,14 +138,14 @@ class _GamePage extends State<GamePage> {
         height: 44,
         width: 44,
         margin: const EdgeInsets.only(right: 8.0),
-        color: Colors.blueGrey,
+        color: solutionMap.containsKey(placeHolder)
+            ? solutionMap[placeHolder]
+            : defaultColor,
         child: Center(
           child: Text(
             pressedKeys.contains(placeHolder) ? placeHolder : "",
             style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-            ),
+                fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),
           ),
         ),
       ),

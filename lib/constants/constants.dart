@@ -46,9 +46,50 @@ double getBlockSize(double currentSize) {
   }
 }
 
+Map<String, int> getDictionary(String word) {
+  Map<String, int> dictionary = {};
+  for (int i = 0; i < word.length; i++) {
+    String letter = word[i];
+    dictionary[letter] ??= 0;
+    dictionary[letter] = dictionary[letter]! + 1;
+  }
+  return dictionary;
+}
+
+Map<String, Color> checkSolution(String solution, String userWord) {
+  Map<String, Color> solutionMap = {};
+  Map<String, int> solutionDictionary = getDictionary(solution);
+  Map<String, int> userDictionary = getDictionary(userWord);
+
+  for (int index = 0; index < 5; index++) {
+    String solutionLetter = solution[index];
+    String userLetter = userWord[index];
+    if (solution[index] == userWord[index]) {
+      solutionDictionary[solutionLetter] =
+          solutionDictionary[solutionLetter]! - 1;
+      userDictionary[solutionLetter] = userDictionary[solutionLetter]! - 1;
+      solutionMap[userLetter] = correctColor;
+    } else {
+      solutionMap[userLetter] = wrongColor;
+    }
+  }
+
+  for (int index = 0; index < 5; index++) {
+    String currentLetter = userWord[index];
+    if (solutionMap[currentLetter] != correctColor) {
+      if (solutionDictionary.containsKey(currentLetter) &&
+          solutionDictionary[currentLetter]! > 0) {
+        solutionMap[currentLetter] = partiallyCorrectColor;
+      }
+    }
+  }
+  return solutionMap;
+}
+
 List<List<Text>> grid = List.generate(
     6, (rowIndex) => List.generate(5, (columnIndex) => const Text("")));
 
 const correctColor = Colors.lightGreen;
-const wrongColor = Colors.blueGrey;
-const defaultColor = Colors.amber;
+const defaultColor = Colors.blueGrey;
+const wrongColor = Color.fromARGB(255, 43, 43, 43);
+const partiallyCorrectColor = Colors.amber;
