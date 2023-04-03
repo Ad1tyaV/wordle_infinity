@@ -56,8 +56,8 @@ Map<String, int> getDictionary(String word) {
   return dictionary;
 }
 
-Map<String, Color> checkSolution(String solution, String userWord) {
-  Map<String, Color> solutionMap = {};
+void checkSolution(String solution, String userWord, List<Color> solutionMap,
+    int startIndex, Map<String, Color> solutionMapForKeyboard) {
   Map<String, int> solutionDictionary = getDictionary(solution);
   Map<String, int> userDictionary = getDictionary(userWord);
 
@@ -68,26 +68,33 @@ Map<String, Color> checkSolution(String solution, String userWord) {
       solutionDictionary[solutionLetter] =
           solutionDictionary[solutionLetter]! - 1;
       userDictionary[solutionLetter] = userDictionary[solutionLetter]! - 1;
-      solutionMap[userLetter] = correctColor;
+      solutionMapForKeyboard[userLetter] = correctColor;
+      solutionMap[startIndex + index] = correctColor;
     } else {
-      solutionMap[userLetter] = wrongColor;
+      solutionMap[startIndex + index] = wrongColor;
+      solutionMapForKeyboard[userLetter] = wrongColor;
     }
   }
 
   for (int index = 0; index < 5; index++) {
     String currentLetter = userWord[index];
-    if (solutionMap[currentLetter] != correctColor) {
+    int currentIndex = index + startIndex;
+    if (solutionMap[currentIndex] != correctColor) {
       if (solutionDictionary.containsKey(currentLetter) &&
           solutionDictionary[currentLetter]! > 0) {
-        solutionMap[currentLetter] = partiallyCorrectColor;
+        solutionMap[currentIndex] = partiallyCorrectColor;
+        solutionMapForKeyboard[currentLetter] = partiallyCorrectColor;
       }
     }
   }
-  return solutionMap;
 }
 
 List<List<Text>> grid = List.generate(
     6, (rowIndex) => List.generate(5, (columnIndex) => const Text("")));
+
+List<Color> initGridMap() {
+  return List.generate(30, (index) => defaultColor);
+}
 
 const correctColor = Colors.lightGreen;
 const defaultColor = Colors.blueGrey;
