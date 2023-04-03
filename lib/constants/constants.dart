@@ -6,6 +6,9 @@ const margin_35 = EdgeInsets.all(35.0);
 const NOT_ENOUGH_WORDS = "Not Enough letters!";
 const INVALID_WORD = "Not a valid word!";
 
+const SRY_MESSAGE = "SORRY YOU LOST ";
+const WIN_MSG = "YOU WON ";
+
 EdgeInsets edgeInsetsAll(double edgeInsetValue) {
   return EdgeInsets.all(edgeInsetValue);
 }
@@ -32,11 +35,13 @@ const allKeys = [
   ['🠔', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⏎']
 ];
 
-const backspace_key = Icon(Icons.backspace_outlined, color: Colors.blueGrey);
+const backspaceKey = Icon(Icons.backspace_outlined, color: Colors.blueGrey);
 
-const return_key = Icon(Icons.keyboard_return, color: Colors.blueGrey);
+const returnKey = Icon(Icons.keyboard_return, color: Colors.blueGrey);
 
 const topPadding = EdgeInsets.all(30.5);
+
+const gridPadding = EdgeInsets.only(top: 18.8);
 
 double getBlockSize(double currentSize) {
   if (currentSize <= 337) {
@@ -56,7 +61,7 @@ Map<String, int> getDictionary(String word) {
   return dictionary;
 }
 
-void checkSolution(String solution, String userWord, List<Color> solutionMap,
+bool checkSolution(String solution, String userWord, List<Color> solutionMap,
     int startIndex, Map<String, Color> solutionMapForKeyboard) {
   Map<String, int> solutionDictionary = getDictionary(solution);
   Map<String, int> userDictionary = getDictionary(userWord);
@@ -87,6 +92,17 @@ void checkSolution(String solution, String userWord, List<Color> solutionMap,
       }
     }
   }
+
+  return isSolved(userWord, solutionMapForKeyboard);
+}
+
+bool isSolved(String userWord, Map<String, Color> solutionMapForKeyboard) {
+  for (int index = 0; index < 5; index++) {
+    if (solutionMapForKeyboard[userWord[index]] != correctColor) {
+      return false;
+    }
+  }
+  return true;
 }
 
 List<List<Text>> grid = List.generate(
@@ -100,3 +116,5 @@ const correctColor = Colors.lightGreen;
 const defaultColor = Colors.blueGrey;
 const wrongColor = Color.fromARGB(255, 43, 43, 43);
 const partiallyCorrectColor = Colors.amber;
+const redColor = Colors.redAccent;
+const backgroundColor = Color.fromARGB(255, 0, 30, 60);

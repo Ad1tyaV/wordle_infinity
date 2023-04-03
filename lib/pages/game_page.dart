@@ -18,9 +18,12 @@ class _GamePage extends State<GamePage> {
   Map<String, Color> solutionMap = {};
   Map<String, Color> solutionMapForKeyboard = {};
   List<Color> gridMap = initGridMap();
+  bool isGameOver = false;
+  bool didWin = false;
 
   String wordSolution = "ADIEU";
   int preventBackspace = 0;
+  final int lastIndex = 25;
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +33,45 @@ class _GamePage extends State<GamePage> {
           centerTitle: true,
         ),
         body: Container(
-          color: const Color.fromARGB(255, 0, 30, 60),
-          child: Column(children: [getGridWidget(), getKeyboard()]),
+          color: backgroundColor,
+          child: Column(
+              children: [getGridWidget(), displayMessage(), getKeyboard()]),
+        ));
+  }
+
+  Widget displayMessage() {
+    return Flexible(
+        flex: 0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              isGameOver ? (didWin ? WIN_MSG : SRY_MESSAGE) : "",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+                color: Colors.white,
+              ),
+            ),
+            isGameOver
+                ? (didWin
+                    ? const Icon(Icons.favorite, color: correctColor)
+                    : const Icon(Icons.heart_broken, color: redColor))
+                : Container()
+          ],
         ));
   }
 
   Widget getKeyboard() {
     return Flexible(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: allKeys.map((row) => getKeyboardRow(row)).toList(),
-      ),
+      flex: 1,
+      child: Padding(
+          padding: gridPadding,
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: allKeys.map((row) => getKeyboardRow(row)).toList(),
+          )),
     );
   }
 
@@ -57,9 +88,9 @@ class _GamePage extends State<GamePage> {
 
     Widget child;
     if (key == '🠔') {
-      child = backspace_key;
+      child = backspaceKey;
     } else if (key == '⏎') {
-      child = return_key;
+      child = returnKey;
     } else {
       child = Text(
         key,
@@ -88,8 +119,6 @@ class _GamePage extends State<GamePage> {
             setState(() {
               switch (key) {
                 case '🠔':
-                  // print(
-                  //     "PreventBackSpace = $preventBackspace and PressedLength = (${pressedKeys.length})");
                   pressedKeys.isNotEmpty
                       ? preventBackspace < pressedKeys.length
                           ? pressedKeys.removeLast()
@@ -98,6 +127,9 @@ class _GamePage extends State<GamePage> {
                   break;
                 case '⏎':
                   {
+                    if (isGameOver) {
+                      return;
+                    }
                     if ((pressedKeys.length) % 5 != 0) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(NOT_ENOUGH_WORDS),
@@ -106,8 +138,6 @@ class _GamePage extends State<GamePage> {
                       String pressedWord = pressedKeys
                           .sublist(pressedKeys.length - 5, pressedKeys.length)
                           .join();
-                      // print("PressedWord = $pressedWord");
-                      // String pressedWord = pressedKeys.join();
                       if (!isValidWord(pressedWord)) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
@@ -117,20 +147,24 @@ class _GamePage extends State<GamePage> {
                         // The entered word is valid
                         preventBackspace = pressedKeys.length;
                         int startIndex = preventBackspace - 5;
-                        // print("PBS=$preventBackspace");
-                        checkSolution(wordSolution, pressedWord, gridMap,
-                            startIndex, solutionMapForKeyboard);
-                        // print(solutionMapForKeyboard);
+                        isGameOver = checkSolution(wordSolution, pressedWord,
+                            gridMap, startIndex, solutionMapForKeyboard);
+                        didWin = isGameOver;
+                        if (startIndex == lastIndex) {
+                          if (!isGameOver) {
+                            isGameOver = true;
+                          }
+                        }
                       }
                     }
                   }
                   break;
                 default:
-                  if (pressedKeys.length % 5 != 0 ||
-                      pressedKeys.isEmpty ||
-                      pressedKeys.length == preventBackspace) {
+                  if (!isGameOver &&
+                      (pressedKeys.length % 5 != 0 ||
+                          pressedKeys.isEmpty ||
+                          pressedKeys.length == preventBackspace)) {
                     pressedKeys.add(key);
-                    // print("PressedKeys=$pressedKeys");
                   }
                   break;
               }
@@ -149,9 +183,6 @@ class _GamePage extends State<GamePage> {
         width: 44,
         margin: const EdgeInsets.only(right: 8.0),
         color: gridMap[currentCellIndex],
-        // color: solutionMap.containsKey(placeHolder)
-        //     ? solutionMap[placeHolder]
-        //     : defaultColor,
         child: Center(
           child: Text(
             pressedKeys.contains(placeHolder) ? placeHolder : "",
@@ -165,9 +196,12 @@ class _GamePage extends State<GamePage> {
 
   Widget getGridWidget() {
     return Flexible(
-      child: Column(
-        children: getGrid(),
-      ),
+      flex: 1,
+      child: Padding(
+          padding: gridPadding,
+          child: Column(
+            children: getGrid(),
+          )),
     );
   }
 
