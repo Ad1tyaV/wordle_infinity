@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wordle_infinity/pages/main_page.dart';
-import './assets/constants.dart' as constants;
+
+import 'constants/constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: constants.title,
+      title: title,
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),

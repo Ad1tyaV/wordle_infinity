@@ -21,7 +21,8 @@ class _GamePage extends State<GamePage> {
   bool isGameOver = false;
   bool didWin = false;
 
-  String wordSolution = "ADIEU";
+  // String wordSolution = getRandomWord().toUpperCase();
+  String wordSolution = "FERRY";
   int preventBackspace = 0;
   final int lastIndex = 25;
 

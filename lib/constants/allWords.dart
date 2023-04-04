@@ -1,3 +1,5 @@
+import 'dart:math';
+
 const allWords = [
   "which",
   "there",
@@ -5760,4 +5762,10 @@ const allWords = [
 
 bool isValidWord(String word) {
   return allWords.contains(word.toLowerCase());
+}
+
+String getRandomWord() {
+  int randomIndex = Random().nextInt(allWords.length);
+  print("Answer is:${allWords[randomIndex]}");
+  return allWords[randomIndex];
 }
