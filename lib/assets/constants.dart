@@ -1,1 +1,1 @@
-const String TITLE = "WORDLE INFINITY";
+const String title = "WORDLE INFINITY";

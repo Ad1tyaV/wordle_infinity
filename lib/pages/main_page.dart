@@ -16,13 +16,13 @@ class _MainPage extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(game_title),
+        title: Text(gameTitle),
         centerTitle: true,
       ),
       body: ListView(shrinkWrap: true, children: [
         Center(
             child: Column(
-                children: menu_items
+                children: menuItems
                     .map((menuItem) => TextButton(
                         onPressed: () {
                           Navigator.push(

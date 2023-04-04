@@ -29,7 +29,7 @@ class _GamePage extends State<GamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(game_title),
+          title: Text(gameTitle),
           centerTitle: true,
         ),
         body: Container(
