@@ -1,16 +1,14 @@
-# wordle_infinity
+# Wordle_Infinity
 
-A new Flutter project.
+**You can play the game [here](https://ad1tyav.github.io/wordle_infinity/#/)**
 
-## Getting Started
+## Setup
 
-This project is a starting point for a Flutter application.
+- Clone the repo.
+- Run `flutter pub get` - This will install all the required packages.
+- `flutter run` to start the project.
+- You can also modify launch.json to debug on VS Code.
 
-A few resources to get you started if this is your first Flutter project:
+## Contributing
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- You can contribute by branching and then creating a pull request.
