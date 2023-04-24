@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wordle_infinity/constants/allWords.dart';
+import 'package:wordle_infinity/constants/all_words.dart';
 import 'package:wordle_infinity/constants/constants.dart';
 
 import '../constants/game_meta.dart';
@@ -19,10 +19,9 @@ class _GamePage extends State<GamePage> {
   Map<String, Color> solutionMapForKeyboard = {};
   List<Color> gridMap = initGridMap();
   bool isGameOver = false;
-  bool didWin = false;
-
-  // String wordSolution = getRandomWord().toUpperCase();
-  String wordSolution = "FERRY";
+  bool didWin = false;  
+  
+  String wordSolution = getTodaysWord().toUpperCase();
   int preventBackspace = 0;
   final int lastIndex = 25;
 

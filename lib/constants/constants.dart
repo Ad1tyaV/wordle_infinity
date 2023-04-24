@@ -70,29 +70,47 @@ bool checkSolution(String solution, String userWord, List<Color> solutionMap,
   Map<String, int> userDictionary = getDictionary(userWord);
 
   for (int index = 0; index < 5; index++) {
-    String solutionLetter = solution[index];
-    String userLetter = userWord[index];
-    if (solution[index] == userWord[index]) {
+    // Only check for equals and paint board green
+    if (userWord[index] == solution[index]) {
+      String solutionLetter = userWord[index];
+      solutionMap[startIndex + index] = correctColor;
       solutionDictionary[solutionLetter] =
           solutionDictionary[solutionLetter]! - 1;
       userDictionary[solutionLetter] = userDictionary[solutionLetter]! - 1;
-      solutionMapForKeyboard[userLetter] = correctColor;
-      solutionMap[startIndex + index] = correctColor;
-    } else {
-      solutionMap[startIndex + index] = wrongColor;
-      solutionMapForKeyboard[userLetter] = wrongColor;
     }
   }
 
   for (int index = 0; index < 5; index++) {
-    String currentLetter = userWord[index];
-    int currentIndex = index + startIndex;
-    if (solutionMap[currentIndex] != correctColor) {
-      if (solutionDictionary.containsKey(currentLetter) &&
-          solutionDictionary[currentLetter]! > 0) {
-        solutionMap[currentIndex] = partiallyCorrectColor;
-        solutionMapForKeyboard[currentLetter] = partiallyCorrectColor;
+    String userLetter = userWord[index];
+    if (userWord[index] != solution[index]) {      
+      if (solutionDictionary.containsKey(userLetter)) {
+        if (solutionDictionary[userLetter]! > 0) {
+          solutionMap[startIndex + index] = partiallyCorrectColor;
+          solutionDictionary[userLetter] = solutionDictionary[userLetter]! - 1;          
+
+          solutionMapForKeyboard[userLetter] =
+              (solutionMapForKeyboard[userLetter] == partiallyCorrectColor ||
+                      solutionMapForKeyboard[userLetter] == correctColor)
+                  ? solutionMapForKeyboard[userLetter]!
+                  : partiallyCorrectColor;
+        } else {
+          solutionMap[startIndex + index] = wrongColor;
+          solutionMapForKeyboard[userLetter] =
+              (solutionMapForKeyboard[userLetter] == partiallyCorrectColor ||
+                      solutionMapForKeyboard[userLetter] == correctColor)
+                  ? solutionMapForKeyboard[userLetter]!
+                  : wrongColor;          
+        }
+      } else {
+        solutionMap[startIndex + index] = wrongColor;
+        solutionMapForKeyboard[userLetter] =
+            (solutionMapForKeyboard[userLetter] == partiallyCorrectColor ||
+                    solutionMapForKeyboard[userLetter] == correctColor)
+                ? solutionMapForKeyboard[userLetter]!
+                : wrongColor;
       }
+    } else {
+      solutionMapForKeyboard[userLetter] = correctColor;
     }
   }
 

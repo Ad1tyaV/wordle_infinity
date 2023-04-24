@@ -7,8 +7,8 @@ List<String> menuItems = ["PLAY", "STATS", "OPTIONS", "DevNotes"];
 
 Map<String, Widget> routeResolver = {
   "PLAY": const GamePage(),
-  "STATS": const GamePage(),
-  "OPTIONS": const GamePage(),
+  "STATS": const UnderDevelopment(),
+  "OPTIONS": const UnderDevelopment(),
   "DevNotes": const UnderDevelopment(),
 };
 

@@ -5760,12 +5760,20 @@ const allWords = [
   "pupal"
 ];
 
+DateTime startDate = DateTime(2023, 4, 23);
+
 bool isValidWord(String word) {
   return allWords.contains(word.toLowerCase());
 }
 
 String getRandomWord() {
   int randomIndex = Random().nextInt(allWords.length);
-  print("Answer is:${allWords[randomIndex]}");
   return allWords[randomIndex];
+}
+
+String getTodaysWord() {
+  DateTime todayDate = DateTime.now();
+  int solutionIndex = todayDate.difference(startDate).inDays;
+  // print("SolutionIndex=${solutionIndex}");
+  return allWords[solutionIndex];
 }
