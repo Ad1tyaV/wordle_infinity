@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wordle_infinity/constants/all_words.dart';
 import 'package:wordle_infinity/constants/constants.dart';
 
@@ -19,24 +20,91 @@ class _GamePage extends State<GamePage> {
   Map<String, Color> solutionMapForKeyboard = {};
   List<Color> gridMap = initGridMap();
   bool isGameOver = false;
-  bool didWin = false;  
-  
+  bool didWin = false;
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.requestFocus();
+  }
+
   String wordSolution = getTodaysWord().toUpperCase();
   int preventBackspace = 0;
   final int lastIndex = 25;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(gameTitle),
-          centerTitle: true,
-        ),
-        body: Container(
-          color: backgroundColor,
-          child: Column(
-              children: [getGridWidget(), displayMessage(), getKeyboard()]),
-        ));
+    return RawKeyboardListener(
+      focusNode: _focusNode,
+      onKey: (RawKeyEvent event) {
+        if (event is RawKeyUpEvent) {
+          setState(() {
+            if ((event.logicalKey.keyId >= 97 &&
+                    event.logicalKey.keyId <= 122) ||
+                (event.logicalKey.keyId >= 65 &&
+                    event.logicalKey.keyId <= 90)) {
+              // Handle alphabet
+              String letter = String.fromCharCode(event.logicalKey.keyId);
+              if (!isGameOver &&
+                  (pressedKeys.length % 5 != 0 ||
+                      pressedKeys.isEmpty ||
+                      pressedKeys.length == preventBackspace)) {
+                pressedKeys.add(letter.toUpperCase());
+              }
+            } else if (event.logicalKey.keyId == 4294967309) {
+              // Handle enter
+              if (isGameOver) {
+                return;
+              }
+              if (pressedKeys.isEmpty || (pressedKeys.length) % 5 != 0) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text(NOT_ENOUGH_WORDS),
+                ));
+              } else {
+                String pressedWord = pressedKeys
+                    .sublist(pressedKeys.length - 5, pressedKeys.length)
+                    .join();
+                if (!isValidWord(pressedWord)) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text(INVALID_WORD),
+                  ));
+                } else {
+                  // The entered word is valid
+                  preventBackspace = pressedKeys.length;
+                  int startIndex = preventBackspace - 5;
+                  isGameOver = checkSolution(wordSolution, pressedWord, gridMap,
+                      startIndex, solutionMapForKeyboard);
+                  didWin = isGameOver;
+                  if (startIndex == lastIndex) {
+                    if (!isGameOver) {
+                      isGameOver = true;
+                    }
+                  }
+                }
+              }
+            } else if (event.logicalKey.keyId == 4294967304) {
+              // Handle backspace
+              pressedKeys.isNotEmpty
+                  ? preventBackspace < pressedKeys.length
+                      ? pressedKeys.removeLast()
+                      : null
+                  : null;
+            }
+          });
+        }
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text(gameTitle),
+            centerTitle: true,
+          ),
+          body: Container(
+            color: backgroundColor,
+            child: Column(
+                children: [getGridWidget(), displayMessage(), getKeyboard()]),
+          )),
+    );
   }
 
   Widget displayMessage() {
@@ -130,7 +198,7 @@ class _GamePage extends State<GamePage> {
                     if (isGameOver) {
                       return;
                     }
-                    if ((pressedKeys.length) % 5 != 0) {
+                    if (pressedKeys.isEmpty || (pressedKeys.length) % 5 != 0) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(NOT_ENOUGH_WORDS),
                       ));

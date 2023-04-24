@@ -82,11 +82,11 @@ bool checkSolution(String solution, String userWord, List<Color> solutionMap,
 
   for (int index = 0; index < 5; index++) {
     String userLetter = userWord[index];
-    if (userWord[index] != solution[index]) {      
+    if (userWord[index] != solution[index]) {
       if (solutionDictionary.containsKey(userLetter)) {
         if (solutionDictionary[userLetter]! > 0) {
           solutionMap[startIndex + index] = partiallyCorrectColor;
-          solutionDictionary[userLetter] = solutionDictionary[userLetter]! - 1;          
+          solutionDictionary[userLetter] = solutionDictionary[userLetter]! - 1;
 
           solutionMapForKeyboard[userLetter] =
               (solutionMapForKeyboard[userLetter] == partiallyCorrectColor ||
@@ -99,7 +99,7 @@ bool checkSolution(String solution, String userWord, List<Color> solutionMap,
               (solutionMapForKeyboard[userLetter] == partiallyCorrectColor ||
                       solutionMapForKeyboard[userLetter] == correctColor)
                   ? solutionMapForKeyboard[userLetter]!
-                  : wrongColor;          
+                  : wrongColor;
         }
       } else {
         solutionMap[startIndex + index] = wrongColor;
