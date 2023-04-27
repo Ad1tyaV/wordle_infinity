@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 const margin_10 = EdgeInsets.only(top: 10);
 const margin_35 = EdgeInsets.all(35.0);
+const BACKSPACE_KEY = 4294967304;
+const ENTER_KEY = 4294967309;
 const String title = "WORDLE INFINITY";
 
 const NOT_ENOUGH_WORDS = "Not Enough letters!";

@@ -34,7 +34,7 @@ class _GamePage extends State<GamePage> {
   final int lastIndex = 25;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return RawKeyboardListener(
       focusNode: _focusNode,
       onKey: (RawKeyEvent event) {
@@ -52,7 +52,7 @@ class _GamePage extends State<GamePage> {
                       pressedKeys.length == preventBackspace)) {
                 pressedKeys.add(letter.toUpperCase());
               }
-            } else if (event.logicalKey.keyId == 4294967309) {
+            } else if (event.logicalKey.keyId == ENTER_KEY) {
               // Handle enter
               if (isGameOver) {
                 return;
@@ -83,7 +83,7 @@ class _GamePage extends State<GamePage> {
                   }
                 }
               }
-            } else if (event.logicalKey.keyId == 4294967304) {
+            } else if (event.logicalKey.keyId == BACKSPACE_KEY) {
               // Handle backspace
               pressedKeys.isNotEmpty
                   ? preventBackspace < pressedKeys.length
@@ -136,7 +136,6 @@ class _GamePage extends State<GamePage> {
       child: Padding(
           padding: gridPadding,
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: allKeys.map((row) => getKeyboardRow(row)).toList(),
           )),
@@ -172,7 +171,7 @@ class _GamePage extends State<GamePage> {
 
     return Flexible(
       child: Container(
-        height: 44,
+        height: 53,
         margin: const EdgeInsets.only(right: 8.0),
         decoration: BoxDecoration(
           color: key == '🠔' || key == '⏎'
@@ -247,15 +246,17 @@ class _GamePage extends State<GamePage> {
   Widget cell(int currentCellIndex, {String placeHolder = ''}) {
     return Flexible(
       child: Container(
-        height: 44,
-        width: 44,
+        height: 53,
+        width: 53,
         margin: const EdgeInsets.only(right: 8.0),
         color: gridMap[currentCellIndex],
         child: Center(
           child: Text(
             pressedKeys.contains(placeHolder) ? placeHolder : "",
             style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),
+                fontWeight: FontWeight.bold,
+                fontSize: 19.7,
+                color: Colors.white),
           ),
         ),
       ),
