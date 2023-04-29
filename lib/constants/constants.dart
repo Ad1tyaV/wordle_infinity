@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:wordle_infinity/models/responsive_size.dart';
 
 const margin_10 = EdgeInsets.only(top: 10);
 const margin_35 = EdgeInsets.all(35.0);
@@ -52,6 +53,15 @@ double getBlockSize(double currentSize) {
   } else {
     return 50.3;
   }
+}
+
+ResponsiveSize defaultSize = ResponsiveSize(44, 44, 8, 17);
+
+ResponsiveSize getResponsiveSizes(Size size) {
+  if(size.width < 404) {
+    return ResponsiveSize(44, 24, 5.3, 12.5);
+  }
+  return defaultSize;
 }
 
 Map<String, int> getDictionary(String word) {

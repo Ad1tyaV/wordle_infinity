@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wordle_infinity/constants/all_words.dart';
 import 'package:wordle_infinity/constants/constants.dart';
+import 'package:wordle_infinity/models/responsive_size.dart';
 
 import '../constants/game_meta.dart';
 
@@ -21,20 +22,21 @@ class _GamePage extends State<GamePage> {
   List<Color> gridMap = initGridMap();
   bool isGameOver = false;
   bool didWin = false;
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();    
 
   @override
   void initState() {
     super.initState();
-    _focusNode.requestFocus();
+    _focusNode.requestFocus();    
   }
 
   String wordSolution = getTodaysWord().toUpperCase();
   int preventBackspace = 0;
   final int lastIndex = 25;
+  // ResponsiveSize keySizes = getResponsiveSizes(MediaQuery.of(context).size);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     return RawKeyboardListener(
       focusNode: _focusNode,
       onKey: (RawKeyEvent event) {
@@ -136,7 +138,6 @@ class _GamePage extends State<GamePage> {
       child: Padding(
           padding: gridPadding,
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: allKeys.map((row) => getKeyboardRow(row)).toList(),
           )),
@@ -154,17 +155,17 @@ class _GamePage extends State<GamePage> {
     const transparentColor = Colors.transparent;
     const defaultColor = Colors.blueGrey;
 
-    Widget child;
+    Widget keyContainer;
     if (key == '🠔') {
-      child = backspaceKey;
+      keyContainer = backspaceKey;
     } else if (key == '⏎') {
-      child = returnKey;
+      keyContainer = returnKey;
     } else {
-      child = Text(
+      keyContainer = Text(
         key,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 17,
+          fontSize: 12.5,
           color: Colors.white,
         ),
       );
@@ -173,7 +174,8 @@ class _GamePage extends State<GamePage> {
     return Flexible(
       child: Container(
         height: 44,
-        margin: const EdgeInsets.only(right: 8.0),
+        width: 24,
+        margin: const EdgeInsets.only(right: 5.3),
         decoration: BoxDecoration(
           color: key == '🠔' || key == '⏎'
               ? transparentColor
@@ -238,7 +240,7 @@ class _GamePage extends State<GamePage> {
               }
             });
           },
-          child: child,
+          child: keyContainer,
         ),
       ),
     );
