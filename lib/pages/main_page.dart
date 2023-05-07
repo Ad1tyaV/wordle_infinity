@@ -3,6 +3,7 @@ import 'package:wordle_infinity/constants/constants.dart';
 import 'package:wordle_infinity/constants/game_meta.dart';
 
 class MainPage extends StatefulWidget {
+  static const routeName = "/";
   const MainPage({super.key});
 
   @override
@@ -12,6 +13,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPage extends State<MainPage> {
+  String? inviteCode;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

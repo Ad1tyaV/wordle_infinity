@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:wordle_infinity/pages/game_page.dart';
+import 'package:wordle_infinity/pages/invite_page.dart';
 import 'package:wordle_infinity/pages/under_development.dart';
 
 String gameTitle = "WORDLE INFINITY";
-List<String> menuItems = ["PLAY", "STATS", "OPTIONS", "DevNotes"];
+List<String> menuItems = ["PLAY", "INVITE", "OPTIONS", "DevNotes"];
 
 Map<String, Widget> routeResolver = {
-  "PLAY": const GamePage(),
-  "STATS": const UnderDevelopment(),
+  "PLAY": const GamePage(inviteCode: ''),
+  "INVITE": const InvitePage(),
   "OPTIONS": const UnderDevelopment(),
   "DevNotes": const UnderDevelopment(),
 };

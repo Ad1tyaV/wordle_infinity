@@ -6,7 +6,10 @@ import 'package:wordle_infinity/constants/constants.dart';
 import '../constants/game_meta.dart';
 
 class GamePage extends StatefulWidget {
-  const GamePage({super.key});
+  static const routeName = "/game-page";
+  final String inviteCode;
+
+  const GamePage({super.key, required this.inviteCode});
 
   @override
   State<StatefulWidget> createState() {
@@ -35,6 +38,11 @@ class _GamePage extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
+    String inviteeWord = widget.inviteCode;
+    // print("InviteCode=${inviteeWord}");
+    if (inviteeWord != "" && isValidWord(inviteeWord)) {
+      wordSolution = widget.inviteCode.toUpperCase();
+    }
     return RawKeyboardListener(
       focusNode: _focusNode,
       onKey: (RawKeyEvent event) {

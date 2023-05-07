@@ -2,15 +2,21 @@
 
 import 'package:flutter/material.dart';
 
+import '../models/invite_code.dart';
+
 const margin_10 = EdgeInsets.only(top: 10);
 const margin_35 = EdgeInsets.all(35.0);
 const String title = "WORDLE INFINITY";
 
 const NOT_ENOUGH_WORDS = "Not Enough letters!";
 const INVALID_WORD = "Not a valid word!";
+const WRD_PROMPT = "Enter a 5-letter word";
 
 const SRY_MESSAGE = "SORRY YOU LOST ";
 const WIN_MSG = "YOU WON ";
+const INVITE_BTN = "GENERATE LINK";
+const COPY_LINK_BTN = "COPY LINK";
+final RegExp WRD_VALIDATOR = RegExp(r'^[a-zA-Z]{5}$');
 
 EdgeInsets edgeInsetsAll(double edgeInsetValue) {
   return EdgeInsets.all(edgeInsetValue);
@@ -131,6 +137,11 @@ List<List<Text>> grid = List.generate(
 
 List<Color> initGridMap() {
   return List.generate(30, (index) => defaultColor);
+}
+
+String generateHash(String inviteWord) {
+  String hash = InviteCode(inviteWord, DateTime.now()).hash;
+  return hash;
 }
 
 const correctColor = Colors.lightGreen;
