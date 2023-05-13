@@ -113,13 +113,12 @@ bool checkSolution(String solution, String userWord, List<Color> solutionMap,
       solutionMapForKeyboard[userLetter] = correctColor;
     }
   }
-
-  return isSolved(userWord, solutionMapForKeyboard);
+  return isSolved(userWord, solution);
 }
 
-bool isSolved(String userWord, Map<String, Color> solutionMapForKeyboard) {
+bool isSolved(String userWord, String solution) {
   for (int index = 0; index < 5; index++) {
-    if (solutionMapForKeyboard[userWord[index]] != correctColor) {
+    if (userWord[index] != solution[index]) {
       return false;
     }
   }
