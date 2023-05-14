@@ -70,8 +70,9 @@ class _InvitePage extends State<InvitePage> {
                                 bool _showError =
                                     !isValidWord(_textEditingController.text);
                                 if (!_showError) {
-                                  hashValue =
-                                      generateHash(_textEditingController.text);
+                                  hashValue = encryptInviteCode(
+                                      _textEditingController.text,
+                                      DateTime.now());
                                 }
                                 showError = _showError;
                               });

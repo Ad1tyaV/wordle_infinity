@@ -1,6 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'dart:convert';
 
 import '../models/invite_code.dart';
 
@@ -17,6 +19,11 @@ const WIN_MSG = "YOU WON ";
 const INVITE_BTN = "GENERATE LINK";
 const COPY_LINK_BTN = "COPY LINK";
 final RegExp WRD_VALIDATOR = RegExp(r'^[a-zA-Z]{5}$');
+const SECRET_KEY_B64 = "6tQhkEy60WYg5WV/O7gXxokR3FkEtAZlNOUhfaVRmuw=";
+const INVITE_MODE = "INVITE MODE";
+const INVITE_EXPIRED = "Invite Expired!";
+const DAILY_MODE = "DAILY Mode";
+const INFINITE_MODE = "INFINITE Mode";
 
 EdgeInsets edgeInsetsAll(double edgeInsetValue) {
   return EdgeInsets.all(edgeInsetValue);
@@ -139,9 +146,30 @@ List<Color> initGridMap() {
   return List.generate(30, (index) => defaultColor);
 }
 
-String generateHash(String inviteWord) {
-  String hash = InviteCode(inviteWord, DateTime.now()).hash;
-  return hash;
+bool isInviteExpired(DateTime inviteDateTime) {
+  return DateTime.now().difference(inviteDateTime).inMinutes > 180;
+}
+
+InviteCode decryptInvite(String encryptedText) {
+  final key = encrypt.Key.fromBase64(SECRET_KEY_B64);
+  final iv = encrypt.IV.fromLength(16);
+  final encrypter = encrypt.Encrypter(encrypt.AES(key));
+  String decrypted =
+      encrypter.decrypt(encrypt.Encrypted.fromBase16(encryptedText), iv: iv);
+  InviteCode decryptedCode = InviteCode.fromJson(json.decode(decrypted));
+  return decryptedCode;
+}
+
+String encryptInviteCode(String word, DateTime createDateTime) {
+  final jsonString =
+      json.encode({'word': word, 'dateTime': createDateTime.toString()});
+
+  final key = encrypt.Key.fromBase64(SECRET_KEY_B64);
+  final iv = encrypt.IV.fromLength(16);
+  final encrypter = encrypt.Encrypter(encrypt.AES(key));
+
+  final encrypted = encrypter.encrypt(jsonString, iv: iv);
+  return encrypted.base16;
 }
 
 const correctColor = Colors.lightGreen;
