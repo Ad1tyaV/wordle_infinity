@@ -4,9 +4,13 @@ import 'package:wordle_infinity/constants/all_words.dart';
 import 'package:wordle_infinity/constants/constants.dart';
 
 import '../constants/game_meta.dart';
+import '../models/invite_code.dart';
 
 class GamePage extends StatefulWidget {
-  const GamePage({super.key});
+  static const routeName = "/game-page";
+  final String inviteCode;
+
+  const GamePage({super.key, required this.inviteCode});
 
   @override
   State<StatefulWidget> createState() {
@@ -22,14 +26,29 @@ class _GamePage extends State<GamePage> {
   bool isGameOver = false;
   bool didWin = false;
   final FocusNode _focusNode = FocusNode();
+  String wordSolution = getTodaysWord().toUpperCase();
+  String gameMode = DAILY_MODE;
 
   @override
   void initState() {
     super.initState();
+    if (widget.inviteCode != "" || widget.inviteCode.isNotEmpty) {
+      InviteCode decryptedCode = decryptInvite(widget.inviteCode);
+      String inviteeWord = decryptedCode.word;
+      bool isInviteActive = !isInviteExpired(decryptedCode.dateTime);
+      if (isInviteActive) {
+        gameMode = INVITE_MODE;
+      } else {
+        gameMode = INVITE_EXPIRED;
+      }
+      if (inviteeWord != "" && isValidWord(inviteeWord) && isInviteActive) {
+        wordSolution = inviteeWord.toUpperCase();
+      }
+    }
+
     _focusNode.requestFocus();
   }
 
-  String wordSolution = getTodaysWord().toUpperCase();
   int preventBackspace = 0;
   final int lastIndex = 25;
 
@@ -101,10 +120,34 @@ class _GamePage extends State<GamePage> {
           ),
           body: Container(
             color: backgroundColor,
-            child: Column(
-                children: [getGridWidget(), displayMessage(), getKeyboard()]),
+            child: Column(children: [
+              gameTypeMessage(),
+              getGridWidget(),
+              displayMessage(),
+              getKeyboard()
+            ]),
           )),
     );
+  }
+
+  Widget gameTypeMessage() {
+    return Flexible(
+        flex: 0,
+        child: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  gameMode,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            )));
   }
 
   Widget displayMessage() {

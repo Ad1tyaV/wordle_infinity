@@ -5774,6 +5774,5 @@ String getRandomWord() {
 String getTodaysWord() {
   DateTime todayDate = DateTime.now();
   int solutionIndex = todayDate.difference(startDate).inDays;
-  // print("SolutionIndex=${solutionIndex}");
   return allWords[solutionIndex];
 }

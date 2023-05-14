@@ -1,6 +1,10 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'dart:convert';
+
+import '../models/invite_code.dart';
 
 const margin_10 = EdgeInsets.only(top: 10);
 const margin_35 = EdgeInsets.all(35.0);
@@ -8,9 +12,18 @@ const String title = "WORDLE INFINITY";
 
 const NOT_ENOUGH_WORDS = "Not Enough letters!";
 const INVALID_WORD = "Not a valid word!";
+const WRD_PROMPT = "Enter a 5-letter word";
 
 const SRY_MESSAGE = "SORRY YOU LOST ";
 const WIN_MSG = "YOU WON ";
+const INVITE_BTN = "GENERATE LINK";
+const COPY_LINK_BTN = "COPY LINK";
+final RegExp WRD_VALIDATOR = RegExp(r'^[a-zA-Z]{5}$');
+const SECRET_KEY_B64 = "6tQhkEy60WYg5WV/O7gXxokR3FkEtAZlNOUhfaVRmuw=";
+const INVITE_MODE = "INVITE MODE";
+const INVITE_EXPIRED = "Invite Expired!";
+const DAILY_MODE = "DAILY Mode";
+const INFINITE_MODE = "INFINITE Mode";
 
 EdgeInsets edgeInsetsAll(double edgeInsetValue) {
   return EdgeInsets.all(edgeInsetValue);
@@ -130,6 +143,32 @@ List<List<Text>> grid = List.generate(
 
 List<Color> initGridMap() {
   return List.generate(30, (index) => defaultColor);
+}
+
+bool isInviteExpired(DateTime inviteDateTime) {
+  return DateTime.now().difference(inviteDateTime).inMinutes > 180;
+}
+
+InviteCode decryptInvite(String encryptedText) {
+  final key = encrypt.Key.fromBase64(SECRET_KEY_B64);
+  final iv = encrypt.IV.fromLength(16);
+  final encrypter = encrypt.Encrypter(encrypt.AES(key));
+  String decrypted =
+      encrypter.decrypt(encrypt.Encrypted.fromBase16(encryptedText), iv: iv);
+  InviteCode decryptedCode = InviteCode.fromJson(json.decode(decrypted));
+  return decryptedCode;
+}
+
+String encryptInviteCode(String word, DateTime createDateTime) {
+  final jsonString =
+      json.encode({'word': word, 'dateTime': createDateTime.toString()});
+
+  final key = encrypt.Key.fromBase64(SECRET_KEY_B64);
+  final iv = encrypt.IV.fromLength(16);
+  final encrypter = encrypt.Encrypter(encrypt.AES(key));
+
+  final encrypted = encrypter.encrypt(jsonString, iv: iv);
+  return encrypted.base16;
 }
 
 const correctColor = Colors.lightGreen;
