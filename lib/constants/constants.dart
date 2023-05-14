@@ -6,6 +6,8 @@ import 'dart:convert';
 
 import '../models/invite_code.dart';
 
+const String APP_NAME = "wordle-infinity";
+
 const margin_10 = EdgeInsets.only(top: 10);
 const margin_35 = EdgeInsets.all(35.0);
 const String title = "WORDLE INFINITY";

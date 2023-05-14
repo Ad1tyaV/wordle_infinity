@@ -20,6 +20,8 @@ class _InvitePage extends State<InvitePage> {
   bool showError = false;
   static String hashValue = "";
   String urlProtocol = "http://";
+  late String urlPrefix;
+  String urlPath = "";
   final _textEditingController = TextEditingController();
 
   @override
@@ -31,6 +33,9 @@ class _InvitePage extends State<InvitePage> {
   Widget build(BuildContext context) {
     if (!Uri.base.toString().contains("localhost")) {
       urlProtocol = "https://";
+      urlPrefix = "$urlProtocol${Uri.base.host}/$APP_NAME";
+    } else {
+      urlPrefix = "$urlProtocol${Uri.base.host}:${Uri.base.port}";
     }
     return Scaffold(
         appBar: AppBar(
@@ -92,7 +97,7 @@ class _InvitePage extends State<InvitePage> {
                                     onPressed: () {
                                       Clipboard.setData(ClipboardData(
                                           text:
-                                              "$urlProtocol${Uri.base.host}${GamePage.routeName}?inviteHash=$hashValue"));
+                                              "$urlPrefix${GamePage.routeName}?inviteHash=$hashValue"));
                                     },
                                     child: const Text(COPY_LINK_BTN,
                                         style: TextStyle(color: Colors.white))))
