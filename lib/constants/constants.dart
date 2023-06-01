@@ -17,7 +17,7 @@ const INVALID_WORD = "Not a valid word!";
 const WRD_PROMPT = "Enter a 5-letter word";
 
 const SRY_MESSAGE = "SORRY YOU LOST ";
-const WIN_MSG = "YOU WON ";
+const WIN_MSG = "YOU WIN ";
 const INVITE_BTN = "GENERATE LINK";
 const COPY_LINK_BTN = "COPY LINK";
 final RegExp WRD_VALIDATOR = RegExp(r'^[a-zA-Z]{5}$');
@@ -174,6 +174,7 @@ String encryptInviteCode(String word, DateTime createDateTime) {
 }
 
 const correctColor = Colors.lightGreen;
+const purpleColor = Colors.purple;
 const defaultColor = Colors.blueGrey;
 const wrongColor = Color.fromARGB(255, 43, 43, 43);
 const partiallyCorrectColor = Colors.amber;

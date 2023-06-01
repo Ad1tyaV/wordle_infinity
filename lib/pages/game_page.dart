@@ -166,7 +166,7 @@ class _GamePage extends State<GamePage> {
             ),
             isGameOver
                 ? (didWin
-                    ? const Icon(Icons.favorite, color: correctColor)
+                    ? const Icon(Icons.favorite, color: purpleColor)
                     : const Icon(Icons.heart_broken, color: redColor))
                 : Container()
           ],
